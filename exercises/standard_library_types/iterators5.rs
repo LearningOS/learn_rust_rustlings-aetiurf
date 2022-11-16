@@ -10,8 +10,6 @@
 //
 // Make the code compile and the tests pass.
 
-// I AM NOT DONE
-
 use std::collections::HashMap;
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -34,6 +32,14 @@ fn count_for(map: &HashMap<String, Progress>, value: Progress) -> usize {
 fn count_iterator(map: &HashMap<String, Progress>, value: Progress) -> usize {
     // map is a hashmap with String keys and Progress values.
     // map = { "variables1": Complete, "from_str": None, ... }
+    let func = |val| {
+        if val == &value {
+            1
+        } else {
+            0
+        }
+    };
+    map.values().map(func).sum()
 }
 
 fn count_collection_for(collection: &[HashMap<String, Progress>], value: Progress) -> usize {
@@ -52,6 +58,17 @@ fn count_collection_iterator(collection: &[HashMap<String, Progress>], value: Pr
     // collection is a slice of hashmaps.
     // collection = [{ "variables1": Complete, "from_str": None, ... },
     //     { "variables2": Complete, ... }, ... ]
+    let is_value = |val| {
+        if val == &value {
+            1
+        } else {
+            0
+        }
+    };
+    collection
+        .into_iter()
+        .map(|c| -> usize { c.values().map(is_value).sum() })
+        .sum()
 }
 
 #[cfg(test)]
